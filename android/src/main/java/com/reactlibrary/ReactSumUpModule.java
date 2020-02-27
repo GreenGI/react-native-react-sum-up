@@ -103,7 +103,7 @@ public class ReactSumUpModule extends ReactContextBaseJavaModule {
             }
             SumUpPayment.Currency currencyCode = this.getCurrency(request.getString("currencyCode"));
             SumUpPayment payment;
-            if(request.getString("skipScreenOptions") == "true" ) {
+
                payment = SumUpPayment.builder()
                         .total(new BigDecimal(request.getString("totalAmount")).setScale(2, RoundingMode.HALF_EVEN))
                         .currency(currencyCode)
@@ -111,14 +111,6 @@ public class ReactSumUpModule extends ReactContextBaseJavaModule {
                         .foreignTransactionId(foreignTransactionId)
                         .skipSuccessScreen()
                         .build();
-            }else {
-                payment = SumUpPayment.builder()
-                        .total(new BigDecimal(request.getString("totalAmount")).setScale(2, RoundingMode.HALF_EVEN))
-                        .currency(currencyCode)
-                        .title(request.getString("title"))
-                        .foreignTransactionId(foreignTransactionId)
-                        .build();
-            }
            
             SumUpAPI.checkout(getCurrentActivity(), payment, REQUEST_CODE_PAYMENT);
         } catch (Exception ex) {
