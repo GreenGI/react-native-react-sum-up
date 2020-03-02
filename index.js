@@ -33,6 +33,10 @@ const SumUpSDK = {
     logout() {
         return SumUpBridge.logout()
     },
+    
+    prepareForCheckout() {
+        return SumUpBridge.preparePaymentCheckout();
+    },
 
     checkout(title, sum, currencyCode, skip="false",foreignTrID="") {
         const request = {
