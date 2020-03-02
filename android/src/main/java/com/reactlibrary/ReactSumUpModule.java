@@ -64,8 +64,16 @@ public class ReactSumUpModule extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void preparePaymentCheckout(Promise promise) {
+        final Activity currentActivity = getCurrentActivity();
         sumUpPromise = promise;
-        SumUpAPI.prepareForCheckout();
+        if(currentActivity != null){
+            currentActivity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    SumUpAPI.prepareForCheckout();
+                }
+            });
+        }
     }
 
     @ReactMethod
