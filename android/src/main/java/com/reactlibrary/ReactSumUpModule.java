@@ -14,6 +14,9 @@ import com.facebook.react.bridge.Promise;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.WritableMap;
 import com.sumup.merchant.Models.TransactionInfo;
+import com.sumup.merchant.CoreState;
+import com.sumup.merchant.cardreader.ReaderLibManager;
+import com.sumup.readerlib.Devices.CardReaderDevice;
 import com.sumup.merchant.api.SumUpAPI;
 import com.sumup.merchant.api.SumUpLogin;
 import com.sumup.merchant.api.SumUpPayment;
@@ -23,6 +26,7 @@ import com.sumup.merchant.Models.UserModel;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.UUID;
+import android.util.Log;
 
 public class ReactSumUpModule extends ReactContextBaseJavaModule {
     private static final int REQUEST_CODE_LOGIN = 1;
@@ -70,9 +74,18 @@ public class ReactSumUpModule extends ReactContextBaseJavaModule {
             currentActivity.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    SumUpAPI.prepareForCheckout();
+                    CoreState var0;
+                    var0 = CoreState.Instance();
+                    ReaderLibManager var1 = var0.get(ReaderLibManager.class).getInstance(var0.getContext());
+                    CardReaderDevice var2 = var1.getDevice();
+                    if (var2 == null) {
+                        SumUpAPI.prepareForCheckout();
+                        Log.e("TAG2", "Prepare called");
+                    }
                 }
             });
+        } else {
+            Log.e("TAG","No activity");
         }
     }
 
